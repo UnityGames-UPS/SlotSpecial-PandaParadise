@@ -14,3 +14,4 @@ jobs:
       s3_folder: SL-PP
       cloudfront_distribution_id: E2PZXPTWLYYS3A
       invalidate_paths: "/SL-PP/*"
+      
