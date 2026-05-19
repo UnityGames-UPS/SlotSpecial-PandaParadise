@@ -109,7 +109,7 @@ public class SocketIOManager : MonoBehaviour
         SocketOptions options = new SocketOptions(); //Back2 Start
         options.AutoConnect = false;
         options.Reconnection = false;
-        options.Timeout = TimeSpan.FromSeconds(3); //Back2 end
+        options.Timeout = TimeSpan.FromSeconds(30); //Back2 end
         options.ConnectWith = Best.SocketIO.Transports.TransportTypes.WebSocket; //BackendChanges
 
         //Application.ExternalCall("window.parent.postMessage", "authToken", "*");

@@ -616,18 +616,7 @@ public class SlotBehaviour : MonoBehaviour
 
         SocketManager.AccumulateResult(BetCounter);
         yield return new WaitUntil(() => SocketManager.isResultdone);
-        for (int j = 0; j < SocketManager.FullResultData.matrix.Count; j++)
-        {
-            for (int i = 0; i < SocketManager.FullResultData.matrix[j].Count; i++)
-            {
-                if (int.TryParse(SocketManager.FullResultData.matrix[j][i], out int symbolId))
-                {
-                    //_resultImages[i].slotImages[j].sprite = _symbolSprites[symbolId];
-                    if (Tempimages[i].slotImages[j]) Tempimages[i].slotImages[j].sprite = myImages[symbolId];
-                    PopulateAnimationSprites(Tempimages[i].slotImages[j].gameObject.GetComponent<ImageAnimation>(), symbolId);
-                }
-            }
-        }
+
 
         MoveGoldenReel(SocketManager.FullResultData.features.wild.column);
 
@@ -1482,11 +1471,9 @@ public class SlotBehaviour : MonoBehaviour
     #region TweeningCode
     private IEnumerator InitializeTweeningRoutine(Transform slotTransform)
     {
-        slotTransform.localPosition = new Vector2(slotTransform.localPosition.x, -430);
         int index = alltweens.Count;
 
         var seq = DOTween.Sequence();
-        seq.Append(slotTransform.DOLocalMoveY(-280, 0.15f).SetEase(Ease.OutCubic));
         seq.Append(slotTransform.DOLocalMoveY(-3000, 0.6f).SetEase(Ease.InCubic));
         seq.OnComplete(() =>
         {
@@ -1505,6 +1492,18 @@ public class SlotBehaviour : MonoBehaviour
     private IEnumerator StopTweening(int reqpos, Transform slotTransform, int index, bool isStop)
     {
         alltweens[index].Kill();
+        
+        for (int j = 0; j < SocketManager.FullResultData.matrix.Count; j++)
+        {
+            if (index < SocketManager.FullResultData.matrix[j].Count)
+            {
+                if (int.TryParse(SocketManager.FullResultData.matrix[j][index], out int symbolId))
+                {
+                    if (Tempimages[index].slotImages[j]) Tempimages[index].slotImages[j].sprite = myImages[symbolId];
+                    PopulateAnimationSprites(Tempimages[index].slotImages[j].gameObject.GetComponent<ImageAnimation>(), symbolId);
+                }
+            }
+        }
         // int tweenpos = (reqpos * IconSizeFactor) - IconSizeFactor;
         slotTransform.localPosition = new Vector2(slotTransform.localPosition.x, 0);
         
