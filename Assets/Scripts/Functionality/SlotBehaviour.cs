@@ -7,7 +7,6 @@ using UnityEngine.UI;
 using System.Linq;
 using TMPro;
 using System;
-using Unity.VisualScripting;
 //using System.Numerics;
 
 public class SlotBehaviour : MonoBehaviour
@@ -124,7 +123,7 @@ public class SlotBehaviour : MonoBehaviour
     private GameObject Image_Prefab;    //icons prefab
     [SerializeField] Sprite[] TurboToggleSprites;
 
-    private List<Tweener> alltweens = new List<Tweener>();
+    private List<Tween> alltweens = new List<Tween>();
 
     private Tweener WinTween = null;
 
@@ -597,15 +596,14 @@ public class SlotBehaviour : MonoBehaviour
         {
             for (int i = 0; i < numberOfSlots; i++)
             {
-                InitializeTweening(Slot_Transform[i]);
+                StartCoroutine(InitializeTweeningRoutine(Slot_Transform[i]));
             }
         }
         else
         {
             for (int i = 0; i < numberOfSlots; i++)
             {
-                InitializeTweening(Slot_Transform[i]);
-                // yield return new WaitForSeconds(0.1f);
+                yield return StartCoroutine(InitializeTweeningRoutine(Slot_Transform[i]));
             }
         }
 
@@ -1482,14 +1480,24 @@ public class SlotBehaviour : MonoBehaviour
 
 
     #region TweeningCode
-    private void InitializeTweening(Transform slotTransform)
+    private IEnumerator InitializeTweeningRoutine(Transform slotTransform)
     {
         slotTransform.localPosition = new Vector2(slotTransform.localPosition.x, -430);
-        // Tweener tweener = slotTransform.DOLocalMoveY(-tweenHeight, 1f).SetLoops(-1, LoopType.Restart).SetDelay(0).SetEase(Ease.Linear);
-        Tweener tweener = slotTransform.DOLocalMoveY(-3000, 0.75f).SetLoops(-1, LoopType.Restart).SetDelay(0).SetEase(Ease.Linear);
+        int index = alltweens.Count;
 
-        tweener.Play();
-        alltweens.Add(tweener);
+        var seq = DOTween.Sequence();
+        seq.Append(slotTransform.DOLocalMoveY(-280, 0.15f).SetEase(Ease.OutCubic));
+        seq.Append(slotTransform.DOLocalMoveY(-3000, 0.6f).SetEase(Ease.InCubic));
+        seq.OnComplete(() =>
+        {
+            slotTransform.localPosition = new Vector2(slotTransform.localPosition.x, -430);
+            Tweener loopTween = slotTransform.DOLocalMoveY(-3000, 0.5f).SetLoops(-1, LoopType.Restart).SetEase(Ease.Linear);
+            alltweens[index] = loopTween;
+        });
+
+        alltweens.Add(seq);
+        
+        yield return new WaitForSeconds(0.1f);
     }
 
 
@@ -1499,7 +1507,11 @@ public class SlotBehaviour : MonoBehaviour
         alltweens[index].Kill();
         // int tweenpos = (reqpos * IconSizeFactor) - IconSizeFactor;
         slotTransform.localPosition = new Vector2(slotTransform.localPosition.x, 0);
-        alltweens[index] = slotTransform.DOLocalMoveY(-1875, 1f).SetEase(Ease.OutElastic);
+        
+        var stopSeq = DOTween.Sequence();
+        stopSeq.Append(slotTransform.DOLocalMoveY(-1925, 0.35f).SetEase(Ease.Linear));
+        stopSeq.Append(slotTransform.DOLocalMoveY(-1875, 0.15f).SetEase(Ease.OutQuad));
+        alltweens[index] = stopSeq;
         if (!isStop)
         {
             Debug.Log("playing stop sound");

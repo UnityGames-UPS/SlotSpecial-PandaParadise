@@ -11444,7 +11444,7 @@ MonoBehaviour:
   bonusdata: []
   _jsManager: {fileID: 500036493}
   JSManager: {fileID: 1029290966}
-  testToken: 1e5e5c7bb5cf4289a50b20c5243d5433
+  testToken: 9883ff3f49b44d8b9748125c47d7486a
   RaycastBlocker: {fileID: 697876621}
 --- !u!114 &500036493
 MonoBehaviour:
@@ -36479,7 +36479,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 850, y: 131}
+  m_AnchoredPosition: {x: 853, y: 131}
   m_SizeDelta: {x: 205, y: 205}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1537542525
