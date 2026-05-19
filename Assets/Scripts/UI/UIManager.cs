@@ -418,7 +418,7 @@ public class UIManager : MonoBehaviour
                 string Description = paylines.symbols[i].description.ToString();
                 if (WildDis_Text) WildDis_Text.text = Description;
             }
-            if (paylines.symbols[i].name.ToUpper() == "2XMULTIPLIER")
+            if (paylines.symbols[i].name.ToUpper() == "MULTIPLIER")
             {
                 Debug.Log($"####### 2x Multiplier :"+ paylines.symbols[i].description.ToString());
                 string Description = paylines.symbols[i].description.ToString();
