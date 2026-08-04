@@ -347,6 +347,13 @@ public class SlotBehaviour : MonoBehaviour
         }
     }
 
+    internal void UpdateBalanceDisplay(double newBalance)
+    {
+        currentBalance = newBalance;
+        if (Balance_text) Balance_text.text = newBalance.ToString("F3");
+        CompareBalance();
+    }
+
     internal void FetchLines(string LineVal, int count)
     {
         y_string.Add(count + 1, LineVal);
@@ -421,7 +428,11 @@ public class SlotBehaviour : MonoBehaviour
 
     private void OnApplicationFocus(bool focus)
     {
-        audioController.CheckFocusFunction(focus, CheckSpinAudio);
+        audioController.SetMuteAll(!focus);
+        if (focus && !CheckSpinAudio)
+        {
+            audioController.StopWLAaudio();
+        }
     }
 
     //function to populate animation sprites accordingly
